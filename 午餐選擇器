@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>今天吃什麼？</title>
+  <style>
+    body {
+      font-family: "Arial", sans-serif;
+      background: #fff8e1;
+      text-align: center;
+      padding: 40px;
+    }
+    h1 {
+      font-size: 40px;
+      color: #d35400;
+    }
+    .category-btn {
+      margin: 10px;
+      padding: 15px 25px;
+      font-size: 20px;
+      border: none;
+      border-radius: 12px;
+      background: #ffcc80;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .category-btn:hover {
+      background: #ffa726;
+    }
+    #result {
+      margin-top: 40px;
+      font-size: 36px;
+      color: #6d4c41;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🍽 今天吃什麼？</h1>
+  <p>選一個分類，我來幫你決定！</p>
+
+  <button class="category-btn" onclick="pick('chinese')">🍚 中式</button>
+  <button class="category-btn" onclick="pick('japanese')">🍜 日式</button>
+  <button class="category-btn" onclick="pick('korean')">🥘 韓式</button>
+  <button class="category-btn" onclick="pick('western')">🍝 西式</button>
+  <button class="category-btn" onclick="pick('fastfood')">🍔 速食</button>
+  <button class="category-btn" onclick="pick('drink')">🧋 飲料</button>
+
+  <div id="result"></div>
+
+<script>
+  const foods = {
+    chinese: ["雞排飯", "滷肉飯", "牛肉麵", "炒飯", "便當"],
+    japanese: ["拉麵", "壽司", "咖哩飯", "丼飯"],
+    korean: ["石鍋拌飯", "韓式炸雞", "辣炒年糕"],
+    western: ["義大利麵", "披薩", "牛排", "焗烤"],
+    fastfood: ["麥當勞", "肯德基", "漢堡王", "摩斯"],
+    drink: ["珍奶", "紅茶拿鐵", "綠茶", "奶蓋"]
+  };
+
+  function pick(type) {
+    const list = foods[type];
+    const randomFood = list[Math.floor(Math.random() * list.length)];
+    document.getElementById("result").innerHTML = `你的午餐是：<br>🍽 <span>${randomFood}</span>！`;
+  }
+</script>
+
+</body>
+</html>
