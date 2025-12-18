@@ -2,41 +2,79 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <title>YT TEST</title>
+  <title>反應錯誤遊戲</title>
+  <style>
+    body {
+      font-family: Arial;
+      text-align: center;
+      margin-top: 60px;
+    }
+    #instruction {
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+    button {
+      padding: 15px 30px;
+      font-size: 20px;
+      margin: 10px;
+      cursor: pointer;
+    }
+    #score {
+      font-size: 22px;
+      margin-top: 30px;
+    }
+  </style>
 </head>
-<body style="background:black;color:white;text-align:center;">
+<body>
 
-  <h1>點我播放</h1>
-  <button id="btn">PLAY</button>
+  <h1>🧠 反應錯誤遊戲</h1>
+  <div id="instruction">準備中...</div>
 
-  <div id="player"></div>
+  <button onclick="playerClick()">按我</button>
 
-  <script src="https://www.youtube.com/iframe_api"></script>
+  <div id="score">分數：0</div>
 
   <script>
-    let player;
+    const instructions = [
+      { text: "請按按鈕", correct: "click" },
+      { text: "不要按按鈕", correct: "wait" },
+      { text: "三秒後再按", correct: "delay" },
+      { text: "什麼都不要做", correct: "wait" }
+    ];
 
-    console.log("JS loaded");
+    let score = 0;
+    let current;
+    let canClick = false;
 
-    function onYouTubeIframeAPIReady() {
-      console.log("YouTube API Ready");
-      alert("YouTube API Ready");
+    function newRound() {
+      canClick = false;
+      current = instructions[Math.floor(Math.random() * instructions.length)];
+      document.getElementById("instruction").textContent = current.text;
 
-      player = new YT.Player("player", {
-        height: "360",
-        width: "640",
-        videoId: "Vk8jY1g2tWk" // Hollow
-      });
+      if (current.correct === "click") {
+        canClick = true;
+      }
+
+      if (current.correct === "delay") {
+        setTimeout(() => {
+          canClick = true;
+        }, 3000);
+      }
     }
 
-    document.getElementById("btn").addEventListener("click", () => {
-      console.log("Button clicked");
-      if (player) {
-        player.playVideo();
+    function playerClick() {
+      if (current.correct === "click" && canClick) {
+        score++;
+      } else if (current.correct === "delay" && canClick) {
+        score++;
       } else {
-        alert("player 還沒好");
+        score--;
       }
-    });
+      document.getElementById("score").textContent = "分數：" + score;
+      newRound();
+    }
+
+    newRound();
   </script>
 
 </body>
