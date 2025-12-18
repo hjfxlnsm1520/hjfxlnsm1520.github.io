@@ -6,18 +6,16 @@
   <style>
     body {
       margin: 0;
-      background: black;
+      background: #000;
+      height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
     }
-
     img {
       max-width: 90%;
       cursor: pointer;
     }
-
     #player {
       display: none;
     }
@@ -25,19 +23,14 @@
 </head>
 <body>
 
-  <!-- 圖片 -->
   <img id="cover" src="straykids.jpg" alt="Stray Kids">
 
-  <!-- YouTube Player -->
   <div id="player"></div>
 
-  <!-- YouTube API -->
   <script src="https://www.youtube.com/iframe_api"></script>
-
   <script>
     let player;
 
-    // 只放「影片 ID」，不是整個網址
     const songs = [
       "Vk8jY1g2tWk", // Hollow
       "1GJ8rJxXjYw", // KARMA
@@ -48,7 +41,17 @@
       "OvioeS1ZZ7o", // MANIAC
       "jYSlpC6Ud2A", // CASE 143
       "JsOOis4bBFg", // S-Class
-      "dBDkYofMUs4"  // LALALALA
+      "dBDkYofMUs4", // LALALALA
+      "Dab4EENTW5I", // MIROH
+      "5rPluw_-Eb4", // Side Effects
+      "Fpgd3ac3_nM", // Levanter
+      "JqCk3Z1L3xY", // Youtiful
+      "PrfPqQ7t3hA", // CINEMA
+      "o7lqCcE4Lho", // TOP
+      "ySxIjeCScgY", // ALL IN
+      "mDw95b-YyEc", // Scars
+      "jf9xJY6c0dY", // CIRCUS
+      "KY3B2Qz6E9A"  // THE SOUND
     ];
 
     function onYouTubeIframeAPIReady() {
@@ -56,10 +59,7 @@
         height: "0",
         width: "0",
         videoId: "",
-        playerVars: {
-          autoplay: 0,
-          controls: 0
-        }
+        playerVars: { controls: 0 }
       });
     }
 
@@ -68,13 +68,9 @@
       player.loadVideoById(songs[index]);
     }
 
-    // 點圖片播放（合法使用者行為）
-    document.getElementById("cover").addEventListener("click", () => {
-      playRandomSong();
-    });
+    document.getElementById("cover").addEventListener("click", playRandomSong);
 
-    // 空白鍵切歌
-    document.addEventListener("keydown", (e) => {
+    document.addEventListener("keydown", e => {
       if (e.code === "Space") {
         e.preventDefault();
         playRandomSong();
