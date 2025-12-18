@@ -1,10 +1,93 @@
-<!DOCTYPE HTML>
-<html>
-  <head>
-    <title>你好</title>
-    <link rel="icon" href="cat.png">
-  </head>
-  <body>
-    Hello World
-  </body>
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <title>Stray Kids Player</title>
+  <style>
+    body {
+      margin: 0;
+      background: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    img {
+      max-width: 90%;
+      cursor: pointer;
+    }
+
+    iframe {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <img id="cover" src="straykids.jpg" alt="Stray Kids">
+
+  <iframe id="player" width="0" height="0" allow="autoplay"></iframe>
+
+  <script>
+    const songs = [
+      // 必放
+      "https://www.youtube.com/embed/Vk8jY1g2tWk?autoplay=1", // Hollow
+      "https://www.youtube.com/embed/1GJ8rJxXjYw?autoplay=1", // KARMA
+      "https://www.youtube.com/embed/2v6G8bY0d2A?autoplay=1", // DO IT
+
+      // 主打 / 超紅
+      "https://www.youtube.com/embed/TQTlCHxyuu8?autoplay=1", // God's Menu
+      "https://www.youtube.com/embed/X-uJtV8ScYk?autoplay=1", // Back Door
+      "https://www.youtube.com/embed/EaswWiwMVs8?autoplay=1", // Thunderous
+      "https://www.youtube.com/embed/OvioeS1ZZ7o?autoplay=1", // MANIAC
+      "https://www.youtube.com/embed/jYSlpC6Ud2A?autoplay=1", // CASE 143
+      "https://www.youtube.com/embed/JsOOis4bBFg?autoplay=1", // S-Class
+      "https://www.youtube.com/embed/dBDkYofMUs4?autoplay=1", // LALALALA
+      "https://www.youtube.com/embed/Dab4EENTW5I?autoplay=1", // MIROH
+      "https://www.youtube.com/embed/5rPluw_-Eb4?autoplay=1", // Side Effects
+      "https://www.youtube.com/embed/Fpgd3ac3_nM?autoplay=1", // Levanter
+      "https://www.youtube.com/embed/57n4dZAPxNY?autoplay=1", // Christmas EveL
+
+      // 日文 / 海外
+      "https://www.youtube.com/embed/o7lqCcE4Lho?autoplay=1", // TOP
+      "https://www.youtube.com/embed/ySxIjeCScgY?autoplay=1", // ALL IN
+      "https://www.youtube.com/embed/mDw95b-YyEc?autoplay=1", // Scars
+      "https://www.youtube.com/embed/jf9xJY6c0dY?autoplay=1", // CIRCUS
+      "https://www.youtube.com/embed/KY3B2Qz6E9A?autoplay=1", // THE SOUND
+      "https://www.youtube.com/embed/LVQpP9U6E9E?autoplay=1", // Social Path
+
+      // Fan Song / 情感
+      "https://www.youtube.com/embed/JqCk3Z1L3xY?autoplay=1", // Youtiful
+      "https://www.youtube.com/embed/PrfPqQ7t3hA?autoplay=1", // CINEMA
+      "https://www.youtube.com/embed/pok5yDw77uM?autoplay=1", // My Pace
+      "https://www.youtube.com/embed/ZnpEBYvgiAU?autoplay=1", // Astronaut
+
+      // 舞台常唱 / 新歌
+      "https://www.youtube.com/embed/4pJ6vEw2O7I?autoplay=1", // Super Bowl
+      "https://www.youtube.com/embed/Zme-_6F6E8A?autoplay=1", // ITEM
+      "https://www.youtube.com/embed/BCZE-44jpIY?autoplay=1", // Charmer
+      "https://www.youtube.com/embed/pM-jOfy_1jM?autoplay=1", // Venom
+      "https://www.youtube.com/embed/UO2rU6wVf_E?autoplay=1"  // FAM
+    ];
+
+    const cover = document.getElementById("cover");
+    const player = document.getElementById("player");
+
+    function playRandomSong() {
+      const index = Math.floor(Math.random() * songs.length);
+      player.src = songs[index];
+    }
+
+    cover.addEventListener("click", playRandomSong);
+
+    document.addEventListener("keydown", e => {
+      if (e.code === "Space") {
+        e.preventDefault();
+        playRandomSong();
+      }
+    });
+  </script>
+
+</body>
 </html>
