@@ -1,65 +1,157 @@
-<script>
-  const instructions = [
-    { text: "請按按鈕", type: "click" },
-    { text: "不要按按鈕（等 2 秒）", type: "wait" },
-    { text: "三秒後再按", type: "delay" }
-  ];
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>反應錯誤遊戲・惡意版</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 60px;
+      transition: background-color 0.3s;
+    }
+    h1 {
+      font-size: 36px;
+    }
+    #instruction {
+      font-size: 28px;
+      margin: 30px;
+      min-height: 40px;
+    }
+    button {
+      padding: 15px 35px;
+      font-size: 22px;
+      cursor: pointer;
+      border-radius: 10px;
+      border: none;
+      background-color: #4CAF50;
+      color: white;
+    }
+    button:active {
+      transform: scale(0.95);
+    }
+    #score {
+      margin-top: 30px;
+      font-size: 22px;
+    }
+    #hint {
+      margin-top: 15px;
+      font-size: 16px;
+      color: gray;
+    }
+  </style>
+</head>
+<body>
 
-  let score = 0;
-  let current;
-  let canClick = false;
-  let roundActive = true;
-  let waitTimer;
+  <h1>😈 反應錯誤遊戲</h1>
+  <div id="instruction">準備中...</div>
 
-  function newRound() {
-    roundActive = true;
-    canClick = false;
-    clearTimeout(waitTimer);
+  <button onclick="playerClick()">按我</button>
 
-    current = instructions[Math.floor(Math.random() * instructions.length)];
-    document.getElementById("instruction").textContent = current.text;
+  <div id="score">分數：0</div>
+  <div id="hint">有些指令是騙人的</div>
 
-    if (current.type === "click") {
-      canClick = true;
+  <script>
+    const instructions = [
+      { text: "請按按鈕", type: "click" },
+      { text: "不要按按鈕（等 2 秒）", type: "wait" },
+      { text: "三秒後再按", type: "delay" },
+
+      // 😈 壞心眼指令
+      { text: "3、2、1…現在不要按", type: "fake" },
+      { text: "不要按按鈕（這題會騙人）", type: "trick" },
+      { text: "⚠ 下一題規則相反", type: "reverse" }
+    ];
+
+    let score = 0;
+    let current = null;
+    let canClick = false;
+    let roundActive = false;
+    let waitTimer = null;
+    let reversed = false;
+
+    function updateUI(text) {
+      document.getElementById("instruction").textContent = text;
+      document.getElementById("score").textContent = "分數：" + score;
     }
 
-    if (current.type === "delay") {
-      setTimeout(() => {
-        canClick = true;
-      }, 3000);
-    }
+    function newRound() {
+      if (waitTimer) {
+        clearTimeout(waitTimer);
+        waitTimer = null;
+      }
 
-    if (current.type === "wait") {
-      waitTimer = setTimeout(() => {
-        if (roundActive) {
-          score++;
-          updateScore();
+      roundActive = true;
+      canClick = false;
+
+      current = instructions[Math.floor(Math.random() * instructions.length)];
+      updateUI(current.text);
+
+      // 規則反轉
+      if (current.type === "reverse") {
+        reversed = !reversed;
+        document.body.style.backgroundColor = "#FFF3CD";
+        roundActive = false;
+        setTimeout(() => {
+          document.body.style.backgroundColor = "white";
           newRound();
-        }
-      }, 2000);
+        }, 1000);
+        return;
+      }
+
+      document.body.style.backgroundColor = "white";
+
+      if (current.type === "click") {
+        canClick = !reversed;
+      }
+
+      if (current.type === "delay") {
+        setTimeout(() => {
+          if (roundActive) canClick = !reversed;
+        }, 3000);
+      }
+
+      if (current.type === "wait") {
+        waitTimer = setTimeout(() => {
+          if (!roundActive) return;
+          score += reversed ? -1 : 1;
+          roundActive = false;
+          updateUI(reversed ? "❌ 被反轉騙了" : "✔ 忍住了！");
+          setTimeout(newRound, 800);
+        }, 2000);
+      }
+
+      if (current.type === "fake" || current.type === "trick") {
+        waitTimer = setTimeout(() => {
+          if (!roundActive) return;
+          score++;
+          roundActive = false;
+          updateUI("✔ 你沒上當");
+          setTimeout(newRound, 800);
+        }, 1500);
+      }
     }
-  }
 
-  function playerClick() {
-    if (!roundActive) return;
+    function playerClick() {
+      if (!roundActive) return;
 
-    if (
-      (current.type === "click" && canClick) ||
-      (current.type === "delay" && canClick)
-    ) {
-      score++;
-    } else {
-      score--;
+      let correct = canClick;
+      if (reversed) correct = !correct;
+
+      if (correct) {
+        score++;
+        updateUI("✔ 正確");
+      } else {
+        score--;
+        updateUI("✖ 上當了");
+      }
+
+      roundActive = false;
+      setTimeout(newRound, 800);
     }
 
-    roundActive = false;
-    updateScore();
     newRound();
-  }
+  </script>
 
-  function updateScore() {
-    document.getElementById("score").textContent = "分數：" + score;
-  }
-
-  newRound();
-</script>
+</body>
+</html>
