@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
   <title>Stray Kids Player</title>
   <style>
     body {
       margin: 0;
-      background: #000;
+      background: black;
       height: 100vh;
       display: flex;
       justify-content: center;
@@ -27,6 +27,7 @@
 
   <div id="player"></div>
 
+  <!-- YouTube IFrame API -->
   <script src="https://www.youtube.com/iframe_api"></script>
   <script>
     let player;
@@ -59,16 +60,21 @@
         height: "0",
         width: "0",
         videoId: "",
-        playerVars: { controls: 0 }
+        playerVars: {
+          controls: 0,
+          autoplay: 0
+        }
       });
     }
 
     function playRandomSong() {
-      const index = Math.floor(Math.random() * songs.length);
-      player.loadVideoById(songs[index]);
+      const rand = Math.floor(Math.random() * songs.length);
+      player.loadVideoById(songs[rand]);
     }
 
-    document.getElementById("cover").addEventListener("click", playRandomSong);
+    document.getElementById("cover").addEventListener("click", () => {
+      playRandomSong();
+    });
 
     document.addEventListener("keydown", e => {
       if (e.code === "Space") {
