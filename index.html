@@ -2,84 +2,39 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <title>Stray Kids Player</title>
-  <style>
-    body {
-      margin: 0;
-      background: black;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    img {
-      max-width: 90%;
-      cursor: pointer;
-    }
-    #player {
-      display: none;
-    }
-  </style>
+  <title>YT TEST</title>
 </head>
-<body>
+<body style="background:black;color:white;text-align:center;">
 
-  <img id="cover" src="straykids.jpg" alt="Stray Kids">
+  <h1>點我播放</h1>
+  <button id="btn">PLAY</button>
 
   <div id="player"></div>
 
-  <!-- YouTube IFrame API -->
   <script src="https://www.youtube.com/iframe_api"></script>
+
   <script>
     let player;
 
-    const songs = [
-      "Vk8jY1g2tWk", // Hollow
-      "1GJ8rJxXjYw", // KARMA
-      "2v6G8bY0d2A", // DO IT
-      "TQTlCHxyuu8", // God's Menu
-      "X-uJtV8ScYk", // Back Door
-      "EaswWiwMVs8", // Thunderous
-      "OvioeS1ZZ7o", // MANIAC
-      "jYSlpC6Ud2A", // CASE 143
-      "JsOOis4bBFg", // S-Class
-      "dBDkYofMUs4", // LALALALA
-      "Dab4EENTW5I", // MIROH
-      "5rPluw_-Eb4", // Side Effects
-      "Fpgd3ac3_nM", // Levanter
-      "JqCk3Z1L3xY", // Youtiful
-      "PrfPqQ7t3hA", // CINEMA
-      "o7lqCcE4Lho", // TOP
-      "ySxIjeCScgY", // ALL IN
-      "mDw95b-YyEc", // Scars
-      "jf9xJY6c0dY", // CIRCUS
-      "KY3B2Qz6E9A"  // THE SOUND
-    ];
+    console.log("JS loaded");
 
     function onYouTubeIframeAPIReady() {
+      console.log("YouTube API Ready");
+      alert("YouTube API Ready");
+
       player = new YT.Player("player", {
-        height: "0",
-        width: "0",
-        videoId: "",
-        playerVars: {
-          controls: 0,
-          autoplay: 0
-        }
+        height: "360",
+        width: "640",
+        videoId: "Vk8jY1g2tWk" // Hollow
       });
     }
 
-    function playRandomSong() {
-      const rand = Math.floor(Math.random() * songs.length);
-      player.loadVideoById(songs[rand]);
-    }
-
-    document.getElementById("cover").addEventListener("click", () => {
-      playRandomSong();
-    });
-
-    document.addEventListener("keydown", e => {
-      if (e.code === "Space") {
-        e.preventDefault();
-        playRandomSong();
+    document.getElementById("btn").addEventListener("click", () => {
+      console.log("Button clicked");
+      if (player) {
+        player.playVideo();
+      } else {
+        alert("player 還沒好");
       }
     });
   </script>
