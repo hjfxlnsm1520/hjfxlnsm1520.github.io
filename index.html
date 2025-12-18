@@ -1,81 +1,65 @@
-<!DOCTYPE html>
-<html lang="zh-Hant">
-<head>
-  <meta charset="UTF-8">
-  <title>反應錯誤遊戲</title>
-  <style>
-    body {
-      font-family: Arial;
-      text-align: center;
-      margin-top: 60px;
+<script>
+  const instructions = [
+    { text: "請按按鈕", type: "click" },
+    { text: "不要按按鈕（等 2 秒）", type: "wait" },
+    { text: "三秒後再按", type: "delay" }
+  ];
+
+  let score = 0;
+  let current;
+  let canClick = false;
+  let roundActive = true;
+  let waitTimer;
+
+  function newRound() {
+    roundActive = true;
+    canClick = false;
+    clearTimeout(waitTimer);
+
+    current = instructions[Math.floor(Math.random() * instructions.length)];
+    document.getElementById("instruction").textContent = current.text;
+
+    if (current.type === "click") {
+      canClick = true;
     }
-    #instruction {
-      font-size: 28px;
-      margin-bottom: 20px;
-    }
-    button {
-      padding: 15px 30px;
-      font-size: 20px;
-      margin: 10px;
-      cursor: pointer;
-    }
-    #score {
-      font-size: 22px;
-      margin-top: 30px;
-    }
-  </style>
-</head>
-<body>
 
-  <h1>🧠 反應錯誤遊戲</h1>
-  <div id="instruction">準備中...</div>
-
-  <button onclick="playerClick()">按我</button>
-
-  <div id="score">分數：0</div>
-
-  <script>
-    const instructions = [
-      { text: "請按按鈕", correct: "click" },
-      { text: "不要按按鈕", correct: "wait" },
-      { text: "三秒後再按", correct: "delay" },
-      { text: "什麼都不要做", correct: "wait" }
-    ];
-
-    let score = 0;
-    let current;
-    let canClick = false;
-
-    function newRound() {
-      canClick = false;
-      current = instructions[Math.floor(Math.random() * instructions.length)];
-      document.getElementById("instruction").textContent = current.text;
-
-      if (current.correct === "click") {
+    if (current.type === "delay") {
+      setTimeout(() => {
         canClick = true;
-      }
-
-      if (current.correct === "delay") {
-        setTimeout(() => {
-          canClick = true;
-        }, 3000);
-      }
+      }, 3000);
     }
 
-    function playerClick() {
-      if (current.correct === "click" && canClick) {
-        score++;
-      } else if (current.correct === "delay" && canClick) {
-        score++;
-      } else {
-        score--;
-      }
-      document.getElementById("score").textContent = "分數：" + score;
-      newRound();
+    if (current.type === "wait") {
+      waitTimer = setTimeout(() => {
+        if (roundActive) {
+          score++;
+          updateScore();
+          newRound();
+        }
+      }, 2000);
+    }
+  }
+
+  function playerClick() {
+    if (!roundActive) return;
+
+    if (
+      (current.type === "click" && canClick) ||
+      (current.type === "delay" && canClick)
+    ) {
+      score++;
+    } else {
+      score--;
     }
 
+    roundActive = false;
+    updateScore();
     newRound();
-  </script>
+  }
 
-</body>
-</html>
+  function updateScore() {
+    document.getElementById("score").textContent = "分數：" + score;
+  }
+
+  newRound();
+</script>
